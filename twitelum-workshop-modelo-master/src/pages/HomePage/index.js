@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react'
+import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import Cabecalho from '../../components/Cabecalho'
 import NavMenu from '../../components/NavMenu'
@@ -18,6 +19,11 @@ class HomePage extends Component {
       tweetAtivo: {}
     }
   }
+
+  static contextTypes = {
+    store: PropTypes.object
+  }
+
   adicionaTweet = (event) => {
     event.preventDefault()
     const {
@@ -43,16 +49,20 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
+    this.context.store.subscribe(() => {
+      const tweetsDoStore = this.context.store.getState()
+      this.setState({
+        novoTweet: '',
+        mensagem: tweetsDoStore.length === 0 ? 'Adicione um Tweet aqui' : '',
+        tweets: tweetsDoStore
+      })
+    })
     fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
       .then((response) => {
         return response.json()
       })
       .then((responseTweets) => {
-        this.setState({
-          novoTweet: '',
-          mensagem: responseTweets.length === 0 ? 'Adicione um Tweet aqui' : '',
-          tweets: responseTweets
-        })
+        this.context.store.dispatch({type: 'CARREGA_TWEETS', tweets: responseTweets})
       })
   }
 
@@ -96,6 +106,7 @@ class HomePage extends Component {
       mensagem,
       tweetAtivo
     } = this.state
+    console.warn(tweetAtivo)
     return (
       <Fragment>
         <Helmet>
@@ -176,6 +187,8 @@ class HomePage extends Component {
                   id={tweetAtivo._id}
                   inModal={true}
                   likedBy={tweetAtivo.likes}
+                  likeado={tweetAtivo.likeado}
+                  totalLikes={tweetAtivo.totalLikes}
                 />
               </Widget>
             }

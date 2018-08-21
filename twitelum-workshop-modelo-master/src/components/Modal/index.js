@@ -3,14 +3,21 @@ import PropTypes from 'prop-types'
 import './modal.css'
 
 class Modal extends Component {
+
+  handlerClose = (event) => {
+    const isModal = event.target.classList.contains('modal')
+    if (isModal) {
+      this.props.onClose()
+    }
+  }
+
   render() {
     const {
       children,
-      isAberto,
-      onClose
+      isAberto
     } = this.props
     return (
-      <div className={`modal ${isAberto && 'modal--isAtivo'}`} onClick={onClose}>
+      <div className={`modal ${isAberto && 'modal--isAtivo'}`} onClick={this.handlerClose}>
         <div className="modal_wrap">
           {isAberto && children}
         </div>
