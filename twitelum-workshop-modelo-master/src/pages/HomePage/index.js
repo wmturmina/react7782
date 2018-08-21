@@ -25,33 +25,9 @@ class HomePage extends Component {
     store: PropTypes.object
   }
 
-  adicionaTweet = (event) => {
-    event.preventDefault()
-    const {
-      novoTweet,
-      tweets
-    } = this.state
-    if (novoTweet) {
-      fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`,
-        {
-          method: 'POST',
-          body: JSON.stringify({ conteudo: novoTweet })
-        })
-        .then((response) => {
-          return response.json()
-        })
-        .then((responseNovoTweet) => {
-          this.setState({
-            novoTweet: '',
-            tweets: [responseNovoTweet, ...tweets]
-          })
-        })
-    }
-  }
-
   componentDidMount() {
     this.context.store.subscribe(() => {
-      const tweetsDoStore = this.context.store.getState()
+      const tweetsDoStore = this.context.store.getState().listaDeTweets
       this.setState({
         novoTweet: '',
         mensagem: tweetsDoStore.length === 0 ? 'Adicione um Tweet aqui' : '',
@@ -61,22 +37,15 @@ class HomePage extends Component {
     this.context.store.dispatch(TweetsActions.carrega())
   }
 
+  adicionaTweet = (event) => {
+    event.preventDefault()
+    if (this.state.novoTweet) {
+      this.context.store.dispatch(TweetsActions.adicionar(this.state.novoTweet))
+    }
+  }
+
   removeOTweet = (indiceDoTweet) => {
-    const {
-      tweets
-    } = this.state
-    fetch(`http://twitelum-api.herokuapp.com/tweets/${indiceDoTweet}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
-      method: 'DELETE'
-    })
-      .then((response) => {
-        if (!response.ok) throw response
-        return response.json()
-      })
-      .then((responseConvertido) => {
-        this.setState({
-          tweets: tweets.filter((item) => item._id !== indiceDoTweet)
-        })
-      })
+    this.context.store.dispatch(TweetsActions.remover(indiceDoTweet))
   }
 
   abreTweet = (tweetSelecionado) => {
