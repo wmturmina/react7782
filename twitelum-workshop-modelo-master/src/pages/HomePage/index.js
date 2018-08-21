@@ -8,6 +8,7 @@ import Widget from '../../components/Widget'
 import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../components/Tweet'
 import Modal from '../../components/Modal'
+import * as TweetsActions from '../../actions/TweetsActions'
 
 class HomePage extends Component {
   constructor() {
@@ -57,13 +58,7 @@ class HomePage extends Component {
         tweets: tweetsDoStore
       })
     })
-    fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((responseTweets) => {
-        this.context.store.dispatch({type: 'CARREGA_TWEETS', tweets: responseTweets})
-      })
+    this.context.store.dispatch(TweetsActions.carrega())
   }
 
   removeOTweet = (indiceDoTweet) => {
@@ -106,7 +101,6 @@ class HomePage extends Component {
       mensagem,
       tweetAtivo
     } = this.state
-    console.warn(tweetAtivo)
     return (
       <Fragment>
         <Helmet>
