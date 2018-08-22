@@ -6,6 +6,9 @@ const mapDispatchToPros = (dispatchRecebido, propsRecebidas) => {
   return {
     onRemove: () => {
       dispatchRecebido(TweetsActions.remover(propsRecebidas.id))
+    },
+    onLike: () => {
+      dispatchRecebido(TweetsActions.like(propsRecebidas.id))
     }
   }
 }

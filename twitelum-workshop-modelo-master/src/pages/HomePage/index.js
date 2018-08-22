@@ -6,8 +6,7 @@ import NavMenu from '../../components/NavMenu'
 import Dashboard from '../../components/Dashboard'
 import Widget from '../../components/Widget'
 import TrendsArea from '../../components/TrendsArea'
-import Tweet from '../../components/Tweet'
-import TweetPadrao from '../../container/TweetPadrao'
+import Tweet from '../../container/TweetPadrao'
 import Modal from '../../components/Modal'
 import * as TweetsActions from '../../actions/TweetsActions'
 
@@ -115,7 +114,7 @@ class HomePage extends Component {
                 }
                 {tweets.map((tweetAtual, index) => {
                   return (
-                    <TweetPadrao
+                    <Tweet
                       key={tweetAtual._id}
                       removivel={tweetAtual.removivel}
                       conteudo={tweetAtual.conteudo}
@@ -145,6 +144,7 @@ class HomePage extends Component {
                   likedBy={tweetAtivo.likes}
                   likeado={tweetAtivo.likeado}
                   totalLikes={tweetAtivo.totalLikes}
+                  removivel={tweetAtivo.removivel}
                 />
               </Widget>
             }

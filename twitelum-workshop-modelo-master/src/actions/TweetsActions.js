@@ -36,9 +36,29 @@ export const remover = (idDoTweet) => {
           if (!response.ok) throw response
           return response.json()
         })
-      .then((responseNovoTweet) => {
+      .then((responseTweetRemovido) => {
         dispatch({type: 'REMOVE_TWEET', idDoTweetRemovido: idDoTweet})
         dispatch({type: 'REMOVE_TWEET_ATIVO'})
+      })
+  }
+}
+
+export const like = (idDoTweet) => {
+  return (dispatch) => {
+    fetch(`http://twitelum-api.herokuapp.com/tweets/${idDoTweet}/like/?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`,
+      {
+        method: 'POST'
+      })
+      .then((response) => {
+        if (!response.ok) throw response
+        return response.json()
+      })
+      .then((responseLikeTweet) => {
+        dispatch({
+          type: 'LIKE_TWEET',
+          idDoTweetLikeado: idDoTweet,
+          likeadoBy: responseLikeTweet.liker
+        })
       })
   }
 }

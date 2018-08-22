@@ -3,28 +3,8 @@ import PropTypes from 'prop-types'
 import './tweet.css'
 
 class Tweet extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      likeado: props.likeado,
-      totalLikes: props.totalLikes
-    }
-  }
-
-  likeHandler = () => {
-    const {
-      likeado,
-      totalLikes
-    } = this.state
-    fetch(`http://twitelum-api.herokuapp.com/tweets/${this.props.id}/like/?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`,
-      {
-        method: 'POST'
-      })
-      .then((response) => response.json())
-    this.setState({
-      likeado: !likeado,
-      totalLikes: totalLikes + (likeado ? -1 : +1)
-    })
+  static contextTypes ={
+    store: PropTypes.object.isRequired
   }
 
   render() {
@@ -35,12 +15,11 @@ class Tweet extends Component {
       likedBy,
       onRemove,
       onClick,
-      inModal
-    } = this.props
-    const {
+      onLike,
+      inModal,
       totalLikes,
       likeado
-    } = this.state
+    } = this.props
     return (
       <article className="tweet">
         <div className="tweet__cabecalho" onClick={onClick}>
@@ -58,7 +37,7 @@ class Tweet extends Component {
               X
             </button>
           }
-          <button className="btn btn--clean" onClick={this.likeHandler}>
+          <button className="btn btn--clean" onClick={onLike}>
             <svg className={`icon icon--small iconHeart
               ${
                 likeado
@@ -109,6 +88,7 @@ Tweet.propTypes = {
   inModal: PropTypes.bool,
   likeado: PropTypes.bool,
   onRemove: PropTypes.func,
+  onLike: PropTypes.func,
   onClick: PropTypes.func
 }
 

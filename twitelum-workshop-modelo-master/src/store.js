@@ -25,6 +25,28 @@ function tweetsReducer(stateAtual = { listaDeTweets: [], tweetAtivo: {} }, actio
     tweetAtivoDeRetorno = {}
   }
 
+  if(action.type === 'LIKE_TWEET') {
+    listaDeTweetsRetorno = listaDeTweetsRetorno.filter((item) => {
+      let localItem = item
+      if (localItem._id === action.idDoTweetLikeado) {
+        const {
+          likeado,
+          totalLikes,
+          likes
+        } = localItem
+        if (likeado) {
+          localItem.likes = likes.filter((likedByItem) => likedByItem.usuario.login !== action.likeadoBy)
+        } else {
+          localItem.likes = [{ usuario: { login: action.likeadoBy }} , ...likes]
+        }
+        localItem.likeado = !likeado
+        localItem.totalLikes = totalLikes + (likeado ? -1 : +1)
+      }
+      return localItem
+    })
+    tweetAtivoDeRetorno = listaDeTweetsRetorno.find((item) => item._id === tweetAtivoDeRetorno._id) || {}
+  }
+
   return {
     listaDeTweets: listaDeTweetsRetorno,
     tweetAtivo: tweetAtivoDeRetorno
