@@ -7,6 +7,7 @@ import Dashboard from '../../components/Dashboard'
 import Widget from '../../components/Widget'
 import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../components/Tweet'
+import TweetPadrao from '../../container/TweetPadrao'
 import Modal from '../../components/Modal'
 import * as TweetsActions from '../../actions/TweetsActions'
 
@@ -29,7 +30,6 @@ class HomePage extends Component {
     this.context.store.subscribe(() => {
       const tweetsDoStore = this.context.store.getState().listaDeTweets
       this.setState({
-        novoTweet: '',
         mensagem: tweetsDoStore.length === 0 ? 'Adicione um Tweet aqui' : '',
         tweets: tweetsDoStore
       })
@@ -41,11 +41,10 @@ class HomePage extends Component {
     event.preventDefault()
     if (this.state.novoTweet) {
       this.context.store.dispatch(TweetsActions.adicionar(this.state.novoTweet))
+      this.setState({
+        novoTweet: '',
+      })
     }
-  }
-
-  removeOTweet = (indiceDoTweet) => {
-    this.context.store.dispatch(TweetsActions.remover(indiceDoTweet))
   }
 
   abreTweet = (tweetSelecionado) => {
@@ -121,7 +120,7 @@ class HomePage extends Component {
                 }
                 {tweets.map((tweetAtual, index) => {
                   return (
-                    <Tweet
+                    <TweetPadrao
                       key={tweetAtual._id}
                       removivel={tweetAtual.removivel}
                       conteudo={tweetAtual.conteudo}
@@ -129,7 +128,6 @@ class HomePage extends Component {
                       totalLikes={tweetAtual.totalLikes}
                       likeado={tweetAtual.likeado}
                       id={tweetAtual._id}
-                      onRemove={() => { this.removeOTweet(tweetAtual._id) }}
                       onClick={() => { this.abreTweet(tweetAtual._id) }}
                     />
                   )
