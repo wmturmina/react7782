@@ -29,9 +29,11 @@ class HomePage extends Component {
   componentDidMount() {
     this.context.store.subscribe(() => {
       const tweetsDoStore = this.context.store.getState().listaDeTweets
+      const tweetAtivoDoStore = this.context.store.getState().tweetAtivo
       this.setState({
         mensagem: tweetsDoStore.length === 0 ? 'Adicione um Tweet aqui' : '',
-        tweets: tweetsDoStore
+        tweets: tweetsDoStore,
+        tweetAtivo: tweetAtivoDoStore
       })
     })
     this.context.store.dispatch(TweetsActions.carrega())
@@ -48,18 +50,11 @@ class HomePage extends Component {
   }
 
   abreTweet = (tweetSelecionado) => {
-    const {
-      tweets
-    } = this.state
-    this.setState({
-      tweetAtivo: tweets.find((item) => item._id === tweetSelecionado)
-    })
+    this.context.store.dispatch({type: 'ADD_TWEET_ATIVO', idTweetSelecionado: tweetSelecionado})
   }
 
-  fechaTweet = (tweetSelecionado) => {
-    this.setState({
-      tweetAtivo: {}
-    })
+  fechaTweet = () => {
+    this.context.store.dispatch({type: 'REMOVE_TWEET_ATIVO'})
   }
 
   render() {

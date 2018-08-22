@@ -17,6 +17,14 @@ function tweetsReducer(stateAtual = { listaDeTweets: [], tweetAtivo: {} }, actio
     listaDeTweetsRetorno = listaDeTweetsRetorno.filter((item) => item._id !== action.idDoTweetRemovido)
   }
 
+  if(action.type === 'ADD_TWEET_ATIVO') {
+    tweetAtivoDeRetorno = listaDeTweetsRetorno.find((item) => item._id === action.idTweetSelecionado)
+  }
+
+  if(action.type === 'REMOVE_TWEET_ATIVO') {
+    tweetAtivoDeRetorno = {}
+  }
+
   return {
     listaDeTweets: listaDeTweetsRetorno,
     tweetAtivo: tweetAtivoDeRetorno

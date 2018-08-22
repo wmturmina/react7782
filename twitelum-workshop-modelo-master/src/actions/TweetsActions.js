@@ -38,6 +38,7 @@ export const remover = (idDoTweet) => {
         })
       .then((responseNovoTweet) => {
         dispatch({type: 'REMOVE_TWEET', idDoTweetRemovido: idDoTweet})
+        dispatch({type: 'REMOVE_TWEET_ATIVO'})
       })
   }
 }

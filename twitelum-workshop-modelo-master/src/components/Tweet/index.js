@@ -21,9 +21,6 @@ class Tweet extends Component {
         method: 'POST'
       })
       .then((response) => response.json())
-      .then((responseLikeado) => {
-        console.warn(responseLikeado)
-      })
     this.setState({
       likeado: !likeado,
       totalLikes: totalLikes + (likeado ? -1 : +1)
