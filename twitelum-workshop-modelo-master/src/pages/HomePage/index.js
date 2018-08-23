@@ -27,8 +27,8 @@ class HomePage extends Component {
 
   componentDidMount() {
     this.context.store.subscribe(() => {
-      const tweetsDoStore = this.context.store.getState().listaDeTweets
-      const tweetAtivoDoStore = this.context.store.getState().tweetAtivo
+      const tweetsDoStore = this.context.store.getState().tweet.listaDeTweets
+      const tweetAtivoDoStore = this.context.store.getState().tweet.tweetAtivo
       this.setState({
         mensagem: tweetsDoStore.length === 0 ? 'Adicione um Tweet aqui' : '',
         tweets: tweetsDoStore,
@@ -63,6 +63,7 @@ class HomePage extends Component {
       mensagem,
       tweetAtivo
     } = this.state
+    const notificacao = this.context.store.getState().notificacao
     return (
       <Fragment>
         <Helmet>
@@ -149,6 +150,11 @@ class HomePage extends Component {
               </Widget>
             }
         </Modal>
+        { notificacao &&
+          <div className="notificacaoMsg">
+            {notificacao}
+          </div>
+        }
       </Fragment>
 
     );

@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware} from 'redux'
+import { createStore, applyMiddleware, combineReducers} from 'redux'
 import thunk from 'redux-thunk'
 
 function tweetsReducer(stateAtual = { listaDeTweets: [], tweetAtivo: {} }, action = {}){
@@ -26,7 +26,7 @@ function tweetsReducer(stateAtual = { listaDeTweets: [], tweetAtivo: {} }, actio
   }
 
   if(action.type === 'LIKE_TWEET') {
-    listaDeTweetsRetorno = listaDeTweetsRetorno.filter((item) => {
+    listaDeTweetsRetorno = listaDeTweetsRetorno.map((item) => {
       let localItem = item
       if (localItem._id === action.idDoTweetLikeado) {
         const {
@@ -53,8 +53,23 @@ function tweetsReducer(stateAtual = { listaDeTweets: [], tweetAtivo: {} }, actio
   }
 }
 
+function notificacaoReducer(stateAtual = '', action = {}){
+  let notificacaoAtual = stateAtual
+  if(action.type === 'ADD_NOTIFICACAO') {
+    notificacaoAtual = action.notificacao
+  }
+
+  if(action.type === 'REMOVE_NOTIFICACAO') {
+    notificacaoAtual = ''
+  }
+  return notificacaoAtual
+}
+
 export default createStore(
-  tweetsReducer,
+  combineReducers({
+    tweet: tweetsReducer,
+    notificacao: notificacaoReducer
+  }),
   applyMiddleware(
     thunk
   )
