@@ -1,8 +1,11 @@
 export const carrega = (notificaoDesejada) => {
   return (dispatch) => {
     dispatch({ type: 'ADD_NOTIFICACAO', notificacao: notificaoDesejada })
-    setTimeout(() => {
-      dispatch({ type: 'REMOVE_NOTIFICACAO' })
-    }, 2000)
+  }
+}
+
+export const remove = () => {
+  return (dispatch) => {
+    dispatch({ type: 'REMOVE_NOTIFICACAO' })
   }
 }

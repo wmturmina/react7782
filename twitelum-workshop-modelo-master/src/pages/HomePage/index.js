@@ -9,6 +9,7 @@ import TrendsArea from '../../components/TrendsArea'
 import Tweet from '../../container/TweetPadrao'
 import Modal from '../../components/Modal'
 import * as TweetsActions from '../../actions/TweetsActions'
+import * as NotificacaoActions from '../../actions/NotificacaoActions'
 
 class HomePage extends Component {
   constructor() {
@@ -151,7 +152,10 @@ class HomePage extends Component {
             }
         </Modal>
         { notificacao &&
-          <div className="notificacaoMsg">
+          <div
+            className="notificacaoMsg"
+            onAnimationEnd={() => this.context.store.dispatch(NotificacaoActions.remove())}
+          >
             {notificacao}
           </div>
         }
